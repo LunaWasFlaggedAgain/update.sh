@@ -11,7 +11,8 @@ A (very bad) auto updater for plugins
 ## list.txt format
 `<type> <repo> <cmd> <out> <dest>`  
 example:
-```FETCH	https://ci.plex.us.org/job/Scissors/job/main/lastSuccessfulBuild/artifact/build/libs/Scissors-1.17.1-R0.1-SNAPSHOT.jar										server.jar
+```
+FETCH	https://ci.plex.us.org/job/Scissors/job/main/lastSuccessfulBuild/artifact/build/libs/Scissors-1.17.1-R0.1-SNAPSHOT.jar										server.jar
 BUILD	git@github.com:AtlasMediaGroup/TotalFreedomMod.git	mvn -B clean package														target/TotalFreedomMod.jar	plugins/TotalFreedomMod.jar
 GHREL	PlayPro/CoreProtect																																			plugins/CoreProtect.jar
 ```  
