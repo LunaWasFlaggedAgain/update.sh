@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SCRIPTSDIR="$(dirname "$0")"
+SCRIPTSDIR="$(readlink -e "$(dirname "$0")")"
 SERVERDIR="$(dirname "$SCRIPTSDIR")"
 WORKDIR="$SCRIPTSDIR/work"
 
