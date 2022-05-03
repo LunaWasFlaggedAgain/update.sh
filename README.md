@@ -2,8 +2,8 @@
 A (very bad) auto updater for plugins
 
 ## how use
-2. create /scripts/ in server folder and move update.sh there
-1. put stuff in /list.txt
+1. create /scripts/ in server folder and move update.sh there
+2. put stuff in /list.txt
 3. execute /scripts/update.sh
 4. profit?
 
