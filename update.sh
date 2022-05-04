@@ -17,7 +17,7 @@ build() {
     if cd "$NAME" 2>/dev/null; then
         git fetch || return 1
 
-        if [ "$(git rev-parse HEAD)" = "$(git rev-parse "@{u}")" ] && [ -f "$DEST" ]; then
+        if [ "$(git rev-parse HEAD)" = "$(git rev-parse "@{u}")" ] && [ -e "$DEST" ]; then
             # We're already up to date. No need to compile!
             cd ..
             echo "### Already up to date."
@@ -46,29 +46,35 @@ build() {
 
 echo "> Updating server files..."
 
-while IFS="$(printf '\t')" read -r type repo cmd out dest; do
-    cd "$WORKDIR" || exit 1
-    
-    if [ "$type" = "BUILD" ]; then
-       if ! build "$repo" "$cmd" "$out" "$dest"; then
-            echo "Got a error while building. Exiting!"
-            exit 1
-        fi
-    elif [ "$type" = "FETCH" ]; then
-        # Binary download
-        echo ">>> Fetching $repo..."
-
-        wget -q -O "$SERVERDIR/$cmd" "$repo" || exit 1
-    elif [ "$type" = "GHREL" ]; then
-        # GitHub release
-        echo ">>> Downloading github release from $repo..."
-
-        URL="$(curl -L "https://api.github.com/repos/$repo/releases/latest" | grep "browser_download_url" | cut -d '"' -f 4)"
-        echo ">>> Fetching $URL..."
-        wget -q -O "$SERVERDIR/$cmd" "$URL" || exit 1
+while read -r line; do
+    if [ "$line" = "" ]; then
+        continue
     fi
 
-    cd "$SCRIPTSDIR" || exit 1
+    echo "$line" | while IFS="$(printf '\t')" read -r type repo cmd out dest; do
+        cd "$WORKDIR" || exit 1
+
+        if [ "$type" = "BUILD" ]; then
+           if ! build "$repo" "$cmd" "$out" "$dest"; then
+                echo "Got a error while building. Exiting!"
+                exit 1
+            fi
+        elif [ "$type" = "FETCH" ]; then
+            # Binary download
+            echo ">>> Fetching $repo..."
+
+            wget -q -O "$SERVERDIR/$cmd" "$repo" || exit 1
+        elif [ "$type" = "GHREL" ]; then
+            # GitHub release
+            echo ">>> Downloading github release from $repo..."
+
+            URL="$(curl -L "https://api.github.com/repos/$repo/releases/latest" | grep "browser_download_url" | cut -d '"' -f 4 | head -n 1)"
+            echo ">>> Fetching $URL..."
+            wget -q -O "$SERVERDIR/$cmd" "$URL" || exit 1
+        fi
+
+        cd "$SCRIPTSDIR" || exit 1
+    done
 done < list.txt
 
 echo "> Done updating server files."
