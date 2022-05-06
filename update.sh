@@ -5,7 +5,7 @@ SERVERDIR="$(dirname "$SCRIPTSDIR")"
 WORKDIR="$SCRIPTSDIR/work"
 
 
-mkdir -p work
+mkdir -p "$SCRIPTSDIR/work"
 
 build() {
     NAME=$(basename "$1" .git)
@@ -75,6 +75,6 @@ while read -r line; do
 
         cd "$SCRIPTSDIR" || exit 1
     done
-done < list.txt
+done < "$SCRIPTSDIR/list.txt"
 
 echo "> Done updating server files."
