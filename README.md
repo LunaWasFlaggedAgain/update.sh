@@ -9,11 +9,11 @@ A (very bad) auto updater for plugins
 
 
 ## list.txt format
-`<type> <repo> <cmd> <out> <dest>`  
+`<type> <repo> <cmd> <out> <dest> <branch>`  
 example:
 ```
 FETCH	https://ci.plex.us.org/job/Scissors/job/main/lastSuccessfulBuild/artifact/build/libs/Scissors-1.17.1-R0.1-SNAPSHOT.jar										server.jar
-BUILD	git@github.com:AtlasMediaGroup/TotalFreedomMod.git	mvn -B clean package														target/TotalFreedomMod.jar	plugins/TotalFreedomMod.jar
+BUILD	git@github.com:AtlasMediaGroup/TotalFreedomMod.git	mvn -B clean package																	target/TotalFreedomMod.jar					plugins/TotalFreedomMod.jar				development
 GHREL	PlayPro/CoreProtect																																			plugins/CoreProtect.jar
 ```  
 use tabs not spaces (or else it won't work)
