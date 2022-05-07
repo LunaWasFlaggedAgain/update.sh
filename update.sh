@@ -29,7 +29,11 @@ build() {
 
     else
         echo ">>> Fetching $1..."
-        git clone --depth=1 "$1" "$NAME" || return 1
+        if [ "$5" = "" ]; then
+            git clone --depth=1 "$1" "$NAME" || return 1
+        else
+            git clone -b "$5" --depth=1 "$1" "$NAME" || return 1
+        fi
         cd "$NAME" || return 1
     fi
 
@@ -51,11 +55,11 @@ while read -r line; do
         continue
     fi
 
-    echo "$line" | while IFS="$(printf '\t')" read -r type repo cmd out dest; do
+    echo "$line" | while IFS="$(printf '\t')" read -r type repo cmd out dest branch; do
         cd "$WORKDIR" || exit 1
 
         if [ "$type" = "BUILD" ]; then
-           if ! build "$repo" "$cmd" "$out" "$dest"; then
+           if ! build "$repo" "$cmd" "$out" "$dest" "$branch"; then
                 echo "Got a error while building. Exiting!"
                 exit 1
             fi
